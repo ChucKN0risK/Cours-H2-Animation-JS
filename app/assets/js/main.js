@@ -1,9 +1,3 @@
-/**
- * Global variables
- *
- * @author Jonathan Path
- */
-
 // CREATE ELEMENT
 // var newEl = document.createElement('div');
 
@@ -32,290 +26,252 @@
 // document.querySelector('.el').previousElementSibling;
 // document.querySelector('.el').nextElementSibling;
 
-console.info('main.js Loaded');
+document.addEventListener('DOMContentLoaded', function() {
 
-// conventions
+	console.info('main.js Loaded');
 
-var Modal = function(el) {
-	this.$el             = el;
-	this.$modalToggleBtn = this.$el.querySelector('.js-toggle-btn');
-	this.$modal          = this.$el.querySelector('.js-' + this.$modalToggleBtn.dataset.content);
-	this.isOpened        = false;
+	// ---------------------------
+	// Quelques conventions :
+	// ---------------------------
 
-	this.init();
-}
+	// 1) Les noms des constructeurs doivent commencer par une majuscule.
+	// Cela permet de savoir rapidement que des méthodes et des propriétés
+	// sont disponibles pour cet objet. Cela permet plus généralement de
+	// les distinguer des functions "normales".
+	// https://css-tricks.com/understanding-javascript-constructors/
 
-Modal.prototype = {
-	init: function() {
-		var self = this;
+	// 2) Les variables stockant un noeud du DOM doivent ressortir visuellement
+	// du code. Quand jQuery est utilisé vous pourrez tomber sur '$'.
+	// Ici on utilise un '_' pour indiquer que la propriété de notre objet
+	// est privée. Elle est locale au constructeur Modal.
+	// http://www.w3schools.com/js/js_object_prototypes.asp
 
-		this.$modalToggleBtn.addEventListener('click', function() {
-			console.log('click')
-			console.log(this)
-			self.toggle();
-		})
-	},
-	open: function() {
-		this.isOpened = true
-		console.log(this.$modal)
-		TweenMax.to(this.$modal, 0.3, {
-	        scale: 1,
-	        ease: Expo.easeOut,
-			transformOrigin:'left bottom'
-	    });
-	},
-	close: function() {
-		var self = this;
+	// Ici Modal est notre constructeur. C'est à lui que l'on renseigne
+	// les différentes propriétés avec lesquelles on va vouloir jouer.
+	// Constructeur = "Ce dont j'ai besoin"
+	var Modal = function(el) {
+		this._el             = el;
+		this._modalToggleBtn = this._el.querySelector('.js-toggle-btn');
+		this._modal          = this._el.querySelector('.js-' + this._modalToggleBtn.dataset.content);
+		this._isOpened       = false;
 
-    	this.isOpened = false;
-    	console.log('close')
-
-    	TweenMax.to(this.$modal, 0.3, {
-	        autoAlpha: 0,
-	        scale: 0,
-	        ease: Expo.easeOut,
-			transformOrigin:'left bottom',
-			clearProps: 'all'
-	        // onComplete: function() {
-	        // 	Faire apparaitre un autre élément 
-	        //	lors de la disparition du précédent
-	        // }
-	    });
-	},
-	toggle: function() {
-		var self = this;
-
-		if ( self.isOpened ) {
-			self.close();
-		} else {
-			self.open();
-		}
+		this.init();
 	}
-};
 
-function instanciateModals() {
-	var modals = document.querySelectorAll('.js-modal');
-	modals.forEach(function(el) {
-		var modal = new Modal(el);
-		console.log(modal)
-	});
-}
-instanciateModals();
+	// Prototype = "Ce que j'ai besoin de faire avec mon constructeur"
+	Modal.prototype = {
+		init: function() {
+			// La méthode init() est appelée dans notre constructeur
+			// donc 'this' fait référence à notre constructeur.
+			// console.log(this) nous renvoie notre constructeur Modal
+			// On stocke donc notre constructeur Modal (this) dans une variable
+			// au nom logique comme 'self' ou '_this'. C'est cette variable qu'on
+			// pourra ensuite utiliser dans d'autres contextes.
+			var self = this;
 
+			this._modalToggleBtn.addEventListener('click', function() {
+				// Ici on déclence une fonction au click sur notre
+				// bouton. On est ici dans le contexte du bouton.
+				// Donc 'this' fait ici référence au bouton et non à
+				// notre construteur Modal sur lequel on a envie d'éxécuter
+				// notre méthode toggle().
+				// console.log(this) --> notre bouton :(
+				// console.log(self) --> notre constructeur Modal :)
+				self.toggle();
+			})
 
-
-var Form = function() {
-	this.$el           = document.querySelector('.js-form');
-	this.$startingText = this.$el.querySelector('.js-starting-text');
-	this.$endingText   = this.$el.querySelector('.js-ending-text');
-	this.$input        = this.$el.querySelector('input[type="email"]');
-	this.$submit       = this.$el.querySelector('button[type="submit"]');
-
-	this.init();
-}
-
-Form.prototype = {
-	init: function() {
-		var self = this;
-
-		this.$el.addEventListener('click', function(e) {
-			// e.stopPropagation();
-
-			TweenMax.to(self.$startingText, 0.2, {
-				scale: 0,
-				autoAlpha: 0,
-				onComplete: function() {
-					TweenMax.to(self.$startingText, 0.2, {
-						display: 'none'
-					}, 0.5);
-					self.open();
-					console.log('click form')
+			// On ferme la modal si elle est affichée et qu'on 
+			// appuie sur ESC
+			document.addEventListener('keydown', function(e) {
+				if ( e.keyCode === 27 && self._isOpened ) {
+					self.toggle();
 				}
 			});
-		});
+		},
+		open: function() {
+			this._isOpened = true;
 
-		this.$submit.addEventListener('click', function(e) {
-			e.preventDefault();
-			e.stopPropagation();
+			TweenMax.to(this._modal, 0.3, {
+	      scale: 1,
+	      ease: Expo.easeOut,
+				transformOrigin:'left bottom'
+	    });
+		},
+		close: function() {
+			this._isOpened = false;
+			console.log('close');
 
-			self.hideChildren();
-		})
-	},
-	open: function() {
-		var self = this;
+			TweenMax.to(this._modal, 0.3, {
+				autoAlpha: 0,
+				scale: 0,
+				ease: Expo.easeOut,
+				transformOrigin:'left bottom',
+				clearProps: 'all'
+				// onComplete: function() {
+				// 	Faire apparaitre un autre élément 
+				//	lors de la disparition du précédent
+				// }
+			});
+		},
+		toggle: function() {
+			if (this._isOpened) {
+				this.close();
+			} else {
+				this.open();
+			}
+			// Version plus courte en ternaire : this._isOpened ? this.close(); : this.open();
+		}
+	};
 
-		TweenMax.to(self.$el, 0.3, {
-			width: '20rem',
-			ease: Expo.easeOut,
-			display: 'flex',
-			onComplete: function() {
-				self.showChildren();
-			}
-		});
-	},
-	showChildren: function() {
-		var self = this;
-		console.log('show input + submit')
+	// On boucle sur tous les noeuds du DOM ayant la classe
+	// 'js-modal' et on crée une instance de notre constructeur
+	// Modal sur chacun d'entre eux.
+	function instanciateModals() {
+		// On stock tous les noeuds du DOM souhaités dans une
+		// variable qui sera un tableau.
+		var modals = document.querySelectorAll('.js-modal');
 
-		TweenMax.to(self.$input, 0.2, {
-			scale: 1,
-			ease: Expo.easeOut,
-			display: 'initial'
-		});
-		TweenMax.to(self.$submit, 0.2, {
-			scale: 1,
-			ease: Expo.easeOut,
-			display: 'initial'
-		});
-	},
-	hideChildren: function() {
-		var self = this;
-		console.log('hide input + submit')
-		TweenMax.to(self.$input, 0.3, {
-			scale: 0,
-			autoAlpha: 0,
-			ease: Expo.easeOut,
-			onComplete: function() {
-				TweenMax.to(self.$input, 0.2, {
-					display: 'none',
-					clearProps: 'all'
-				});
-				self.close();
-			}
-		});
-		TweenMax.to(self.$submit, 0.3, {
-			scale: 0,
-			autoAlpha: 0,
-			ease: Expo.easeOut,
-			onComplete: function() {
-				TweenMax.to(self.$submit, 0.2, {
-					display: 'none',
-					clearProps: 'all'
-				});
-			}
-		});
-	},
-	close: function() {
-		var self = this;
-
-		console.log('close')
-		TweenMax.to(self.$el, 0.3, {
-			width: '8rem',
-			ease: Expo.easeOut,
-			onComplete: function() {
-				self.showEndingText();
-			}
-		});
-	},
-	showEndingText: function() {
-		var self = this;
-		// var _this = this;
-		TweenMax.to(self.$endingText, 0.3, {
-			scale: 1,
-			ease: Expo.easeOut,
-			display: 'initial',
-			onComplete: function() {
-				console.log('youpiiiiiiiii')
-			}
+		// Pour chaque élément de ce tableau on crée une instance
+		// de la class Modal
+		modals.forEach(function(el) {
+			var modal = new Modal(el);
+			console.log(el, modal);
 		});
 	}
-}
-
-var form = new Form();
+	instanciateModals();
 
 
 
+	var Form = {
+		init: function(el) {
+			this._el           = el;
+			this._startingText = this._el.querySelector('.js-starting-text');
+			this._endingText   = this._el.querySelector('.js-ending-text');
+			this._input        = this._el.querySelector('input[type="email"]');
+			this._submit       = this._el.querySelector('button[type="submit"]');
 
+			this.events();
+		},
+		events: function() {
+			var self = this;
 
+			this._el.addEventListener('click', function() {
+				TweenMax.to(self._startingText, 0.2, {
+					scale: 0,
+					autoAlpha: 0,
+					onComplete: function() {
+						TweenMax.to(self._startingText, 0.2, {
+							display: 'none'
+						}, 0.5);
+						self.open();
+						console.log('click form')
+					}
+				});
+			});
 
+			this._submit.addEventListener('click', function(e) {
+				// Si on valide un formulaire le comportement par défaut du 
+				// navigateur sera de soumettre les infos dans les champs
+				// et de recharger la page. Pour finaliser notre animation
+				// on doit empêcher (EN : 'to prevent') le comportement 
+				// par défaut du browser.
+				e.preventDefault();
+				// En JS, il faut comprendre la délégation d'événement.
+				// Si on intérragit avec un élément, comme un clique sur 
+				// un bouton, alors le click se propage de notre cible, 
+				// le bouton, à tous ses ancêtres (notamment le formulaire).
+				// C'est ce qu'on apelle l'event bubbling.
+				// Hors pour lancer notre animation on clique sur le formulaire.
+				// Si on empêche pas le click de remonter au formulaire on créera
+				// une boucle et le début de notre animation reviendra.
+				// On dit donc à l'événement de stopper sa propagation.
+				e.stopPropagation();
 
+				self.hideChildren();
+			})
+		},
+		open: function() {
+			var self = this;
 
+			TweenMax.to(self._el, 0.3, {
+				width: '20rem',
+				ease: Expo.easeOut,
+				display: 'flex',
+				onComplete: function() {
+					self.showChildren();
+				}
+			});
+		},
+		showChildren: function() {
+			var self = this;
+			console.log('show input + submit');
 
+			TweenMax.to(self._input, 0.2, {
+				scale: 1,
+				ease: Expo.easeOut,
+				display: 'initial'
+			});
+			TweenMax.to(self._submit, 0.2, {
+				scale: 1,
+				ease: Expo.easeOut,
+				display: 'initial'
+			});
+		},
+		hideChildren: function() {
+			var self = this;
+			console.log('hide input + submit')
 
+			TweenMax.to(self._input, 0.3, {
+				scale: 0,
+				autoAlpha: 0,
+				ease: Expo.easeOut,
+				onComplete: function() {
+					TweenMax.to(self._input, 0.2, {
+						display: 'none',
+						clearProps: 'all'
+					});
+					self.close();
+				}
+			});
+			TweenMax.to(self._submit, 0.3, {
+				scale: 0,
+				autoAlpha: 0,
+				ease: Expo.easeOut,
+				onComplete: function() {
+					TweenMax.to(self._submit, 0.2, {
+						display: 'none',
+						clearProps: 'all'
+					});
+				}
+			});
+		},
+		close: function() {
+			var self = this;
 
+			console.log('close');
+			TweenMax.to(self._el, 0.3, {
+				width: '8rem',
+				ease: Expo.easeOut,
+				onComplete: function() {
+					self.showEndingText();
+				}
+			});
+		},
+		showEndingText: function() {
+			var self = this;
 
+			TweenMax.to(self._endingText, 0.3, {
+				scale: 1,
+				ease: Expo.easeOut,
+				display: 'initial',
+				onComplete: function() {
+					console.log('youpiiiiiiiii');
+				}
+			});
+		}
+	}
 
+	var form = Form;
+	form.init(document.querySelector('.js-form'));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// var Modal = function() {
-//     this.$el = document.querySelector('.js-toggle-btn');
-//     this.$modal = document.querySelector('.js-' + this.$el.dataset.content);
-//     this.isOpened = false;
-
-//     this.init();
-// };
-
-// Modal.prototype = {
-//     init: function() {
-//     	var self = this;
-
-//         this.$el.addEventListener('click', function() {
-// 		    self.toggle();
-//         });
-
-//         // Close modal when user hits ESC
-//         document.onkeydown = function(e) {
-//         	e = e || window.event;
-//         	console.log(e.keyCode)
-//         	if ( e.keyCode === 27 && self.isOpened ) {
-//         		self.close();
-//         	}
-//         };
-//     },
-//     toggle: function() {
-//     	this.isOpened === false ? this.open() : this.close();
-//     },
-//     open: function() {
-//     	this.isOpened = true;
-//     	console.log('open')
-
-//     	TweenMax.to(this.$modal, 0.3, {
-// 	        scale: 1,
-// 	        ease: Expo.easeOut,
-// 			transformOrigin:'left bottom',
-// 	        display: 'block'
-// 	    });
-//     },
-//     close: function() {
-//     	var self = this;
-
-//     	this.isOpened = false;
-//     	console.log('close')
-
-//     	TweenMax.to(this.$modal, 0.3, {
-// 	        autoAlpha: 0,
-// 	        scale: 0,
-// 	        ease: Expo.easeOut,
-// 			transformOrigin:'left bottom',
-// 	        onComplete: function() {
-// 	        	TweenMax.to(self.$modal, 0.2, {
-// 	        		display: 'none',
-// 	        		clearProps: 'all'
-// 	        	}, 0.2);
-// 	        }
-// 	    });
-//     },
-// };
-
-// var modal = new Modal();
-
-
-// We want to instaciate our ItemExpander Class
-// for each HTML elements that have the class '.js-item-expander'
-// $('.js-modal').each(function() {
-//     var itemExpander = new ItemExpander($(this));
-//     console.log(itemExpander)
-// });
+});

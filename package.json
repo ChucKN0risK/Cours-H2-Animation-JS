@@ -14,10 +14,6 @@
     "email": "lchenais@gmail.com",
     "url": "https://github.com/ChucKN0risK"
   },
-  "repository": {
-    "type": "git",
-    "url": "github.com/ChucKN0risK/Cours-H2-Animation-JS.git"
-  },
   "license": "MIT",
   "devDependencies": {
     "browser-sync": "^2.12.3",
@@ -40,7 +36,6 @@
     "gulp-strip-css-comments": "^1.2.0",
     "gulp-uglify": "^2.0.0",
     "gulp-uncss": "^1.0.5",
-    "gulp-util": "^3.0.7",
-    "sassdoc": "^2.1.20"
+    "gulp-util": "^3.0.7"
   }
 }

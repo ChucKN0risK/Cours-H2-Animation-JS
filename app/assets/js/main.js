@@ -92,10 +92,10 @@ document.addEventListener('DOMContentLoaded', function() {
 			this._isOpened = true;
 
 			TweenMax.to(this._modal, 0.3, {
-	      scale: 1,
-	      ease: Expo.easeOut,
+				scale: 1,
+				ease: Expo.easeOut,
 				transformOrigin:'left bottom'
-	    });
+			});
 		},
 		close: function() {
 			this._isOpened = false;

@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			var self = this;
 
 			this._modalToggleBtn.addEventListener('click', function() {
-				// Ici on déclence une fonction au click sur notre
+				// Ici on déclenche une fonction au click sur notre
 				// bouton. On est ici dans le contexte du bouton.
 				// Donc 'this' fait ici référence au bouton et non à
 				// notre construteur Modal sur lequel on a envie d'éxécuter

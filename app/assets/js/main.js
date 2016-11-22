@@ -235,6 +235,11 @@ document.addEventListener('DOMContentLoaded', function() {
 			});
 			TweenMax.to(self._submit, 0.3, {
 				scale: 0,
+				// The autoAlpha property is the same thing as
+				// opacity except that when the value hits 0, 
+				// the visibility property will be set to hidden
+				// in order to improve browser rendering performance
+				// and prevent clicks or interactivity on the target.
 				autoAlpha: 0,
 				ease: Expo.easeOut,
 				onComplete: function() {

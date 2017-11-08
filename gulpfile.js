@@ -1,24 +1,21 @@
+'use strict';
+
 // ---------------------------------------------------------------
 // Include Plugins
 // ---------------------------------------------------------------
-var gulp             = require('gulp');
-var sass             = require('gulp-sass');
-var sassdoc          = require('sassdoc');
-var plumber          = require('gulp-plumber');
-var gutil            = require('gulp-util');
-var sourcemaps       = require('gulp-sourcemaps');
-var autoprefixer     = require('gulp-autoprefixer');
-var cleanCSS         = require('gulp-clean-css');
-var browserSync      = require('browser-sync');
-var del              = require('del');
-var critical         = require('critical').stream;
-var rename           = require('gulp-rename');
-var size             = require('gulp-size');
+const gulp             = require('gulp');
+const sass             = require('gulp-sass');
+const plumber          = require('gulp-plumber');
+const gutil            = require('gulp-util');
+const sourcemaps       = require('gulp-sourcemaps');
+const autoprefixer     = require('gulp-autoprefixer');
+const browserSync      = require('browser-sync');
+const size             = require('gulp-size');
 
 // ---------------------------------------------------------------
 // Configuration
 // ---------------------------------------------------------------
-var path = {
+const path = {
     sass: 'app/assets/scss/**/*.scss',
     css: 'app/assets/css/',
     js: 'app/assets/js/*.js',
@@ -26,15 +23,15 @@ var path = {
     html: 'app/*.html'
 };
 
-var autoprefixerOptions = {
+const autoprefixerOptions = {
     browsers: ['> 1%', 'last 2 versions', 'Firefox ESR', 'Opera 12.1']
 };
 
-var reload = browserSync.reload;
+const reload = browserSync.reload;
 
 // gulp-plumber + gulp-util are used for proper error handling and formatting
 // see source : https://www.timroes.de/2015/01/06/proper-error-handling-in-gulp-js/
-var gulp_src = gulp.src;
+const gulp_src = gulp.src;
 gulp.src = function() {
     return gulp_src.apply(gulp, arguments)
         .pipe(plumber(function(error) {
@@ -65,14 +62,13 @@ gulp.task('watch', ['sass', 'serve'], function() {
     gulp.watch(path.js, reload);
 });
 
-// Generate SassDoc + Add Sourcemaps + Autoprefixer 
+// Add Sourcemaps + Autoprefixer 
 // + cache modified files 
 // + size the final css filereload on change
 // + refresh stream
 gulp.task('sass', function() {
     return gulp
         .src(path.sass)
-        .pipe(sassdoc())
         .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(autoprefixer(autoprefixerOptions))

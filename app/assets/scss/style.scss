@@ -32,9 +32,8 @@ body {
 body {
 	margin: 0;
 	padding: 0;
-	background-color: $red;
+	background: linear-gradient(45deg, #eeb06e, #ff0404);
 }
-
 
 .modal-wrapper--infos {
 	position: absolute;
@@ -66,6 +65,7 @@ body {
 	border-radius: $form-height;
 	padding: $form-padding 1rem;
 	color: $red;
+	@include box-shadow;
 }
 
 form {
@@ -78,6 +78,7 @@ form {
 	height: $form-height;
 	border-radius: $form-height;
 	padding: $form-padding;
+	@include box-shadow;
 
 	input {
 		padding-left: .5rem;

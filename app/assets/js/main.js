@@ -26,8 +26,7 @@
 // document.querySelector('.el').previousElementSibling;
 // document.querySelector('.el').nextElementSibling;
 
-document.addEventListener('DOMContentLoaded', function() {
-
+document.addEventListener('DOMContentLoaded', () => {
 	console.info('main.js Loaded :)');
 
   class FormAnimation {
@@ -43,8 +42,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     _events() {
-      if (!this._isDisabled) {
-        this._el.addEventListener('click', () => {
+      this._el.addEventListener('click', () => {
+        if (!this._isDisabled) {
           TweenMax.to(this._startingText, 0.2, {
             scale: 0,
             autoAlpha: 0,
@@ -58,15 +57,15 @@ document.addEventListener('DOMContentLoaded', function() {
               this._open();
             }
           });
-        })
-        this._el.addEventListener('submit', (e) => {
-          e.preventDefault();
-          this._hideChildren();
-        })
-        this._submitButton.addEventListener('click', (e) => {
-          e.stopPropagation();
-        })
-      }
+        }
+      })
+      this._el.addEventListener('submit', (e) => {
+        e.preventDefault();
+        this._hideChildren();
+      })
+      this._submitButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+      })
     }
 
     _open() {
@@ -99,16 +98,19 @@ document.addEventListener('DOMContentLoaded', function() {
         ease: Expo.easeOut,
         onComplete: () => {
             TweenMax.to(this._input, 0.2, {
-              display: 'none'
+              display: 'none',
+              clearProps: 'all'
             }, 0.5);
           }
       });
       TweenMax.to(this._submitButton, 0.2, {
         scale: 0,
+        autoAlpha: 0,
         ease: Expo.easeOut,
         onComplete: () => {
           TweenMax.to(this._submitButton, 0.2, {
-            display: 'none'
+            display: 'none',
+            clearProps: 'all'
           }, 0.5);
           this._close();
         }
@@ -139,3 +141,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   const formAnimation = new FormAnimation;
 });
+
+
+
+
+
+
+
+

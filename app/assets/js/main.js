@@ -1,3 +1,5 @@
+// On s'assure que notre code s'éxécute une fois que notre
+// DOM est bien chargé.
 document.addEventListener('DOMContentLoaded', () => {
 	console.info('main.js Loaded :)');
 

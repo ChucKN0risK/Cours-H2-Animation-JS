@@ -1,52 +1,25 @@
-// CREATE ELEMENT
-// var newEl = document.createElement('div');
-
-// GET ATTRIBUTE
-// document.querySelector('.el').setAttribute('key', 'value');
-// document.querySelector('.el').getAttribute('key');
-
-// ADD/REMOVE/TOGGLE CLASS
-// document.querySelector('.el').classList.add('class');
-// document.querySelector('.el').classList.remove('class');
-// document.querySelector('.el').classList.toggle('class');
-
-// REMOVE
-// remove('.el');
-
-// function remove(el) {
-//   var toRemove = document.querySelector(el);
-
-//   toRemove.parentNode.removeChild(toRemove);
-// }
-
-// PARENT
-// document.querySelector('.el').parentNode;
-
-// PREV/NEXT ELEMENT
-// document.querySelector('.el').previousElementSibling;
-// document.querySelector('.el').nextElementSibling;
-
 document.addEventListener('DOMContentLoaded', () => {
 	console.info('main.js Loaded :)');
 
-  // ---------------------------
-  // Quelques conventions :
-  // ---------------------------
-
-  // 1) Les noms des constructeurs doivent commencer par une majuscule.
+  // Les noms des constructeurs doivent commencer par une majuscule.
   // Cela permet de savoir rapidement que des méthodes et des propriétés
   // sont disponibles pour cet objet. Cela permet plus généralement de
   // les distinguer des functions "normales".
   // https://css-tricks.com/understanding-javascript-constructors/
-
-  // 2) Les variables stockant un noeud du DOM doivent ressortir visuellement
-  // du code. Quand jQuery est utilisé vous pourrez tomber sur '$'.
-  // Ici on utilise un '_' pour indiquer que la propriété de notre objet
-  // est privée. Elle est locale au constructeur Modal.
-  // http://www.w3schools.com/js/js_object_prototypes.asp
   class Form {
-    constructor() {
-      this._element      = document.querySelector('.js-form');
+    /**
+     * Applique l'animation du formulaire sur les éléments
+     * @param {string} selector
+     */
+    static bind(selector) {
+    	document.querySelectorAll(selector).forEach(element => new Form(element))
+    }
+
+    /**
+     * @param {HTMLElement} element
+     */
+    constructor(element) {
+      this._element      = element;
       this._startingText = this._element.querySelector('.js-starting-text');
       this._input        = this._element.querySelector('input');
       this._submitButton = this._element.querySelector('button[type="submit"]');
@@ -55,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       this._events();
     }
+
 
     // La méthode _events() comorte l'ensemble des évènements
     // que nous ajoutons sur notre Class ou sur ses éléments
@@ -168,16 +142,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const form = new Form;
+  Form.bind('.js-form');
 
   class Modal {
-    constructor(el) {
-      this._el             = el;
-      this._modalToggleBtn = this._el.querySelector('.js-toggle-btn');
-      this._modal          = this._el.querySelector('.js-' + this._modalToggleBtn.dataset.content);
+  	/**
+     * @param {HTMLElement} element
+     */
+    constructor(element) {
+      this._element             = element;
+      this._modalToggleBtn = this._element.querySelector('.js-toggle-btn');
+      this._modal          = this._element.querySelector('.js-' + this._modalToggleBtn.dataset.content);
       this._isOpened       = false;
 
       this._events();
+    }
+
+    /**
+     * Applique le système de modal sur les éléments
+     * @param {string} selector
+     */
+    // Cette méthode est propre à notre classe Modal.
+    // Elle permet d'instancier notre classe selon un sélecteur.
+    // Une méthode statique s'éxécute directement sur sa classe et
+    // non sur une de ses instances.
+    // Pour en savoir plus : https://javascript.info/class#static-methods
+    static bind(selector) {
+    	document.querySelectorAll(selector).forEach(element => new Modal(element))
     }
 
     _events() {
@@ -200,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
       TweenMax.to(this._modal, 0.3, {
         scale: 1,
         ease: Expo.easeOut,
-        transformOrigin:'left bottom'
+        transformOrigin: 'left bottom'
       });
     }
 
@@ -211,12 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
         autoAlpha: 0,
         scale: 0,
         ease: Expo.easeOut,
-        transformOrigin:'left bottom',
+        transformOrigin: 'left bottom',
         clearProps: 'all'
-        // onComplete: function() {
-        //  Faire apparaitre un autre élément 
-        //  lors de la disparition du précédent
-        // }
       });
     }
 
@@ -230,20 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // On boucle sur tous les noeuds du DOM ayant la classe
-  // 'js-modal' et on crée une instance de notre constructeur
-  // Modal sur chacun d'entre eux.
-  const instanciateModals = () => {
-    // On stock tous les noeuds du DOM souhaités dans une
-    // variable qui sera un tableau.
-    const modals = document.querySelectorAll('.js-modal');
-
-    // Pour chaque élément de ce tableau on crée une instance
-    // de la class Modal
-    modals.forEach((el) => {
-      const modal = new Modal(el);
-    })
-  }
-  instanciateModals();
+  Modal.bind('.js-modal');
 });
 

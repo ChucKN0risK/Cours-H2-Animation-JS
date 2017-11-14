@@ -47,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
               // afin de permettre aux autres éléments
               // suivants de se placer correctement
               TweenMax.to(this._startingText, 0.2, {
-                display: 'none'
-              }, 0.5);
+                display: 'none',
+                delay: 0.3
+              });
               this._open();
             }
           });
@@ -84,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
     _showChildren() {
       TweenMax.to(this._input, 0.3, {
         scale: 1,
-        display:'block'
+        display: 'block'
       })
       TweenMax.to(this._submitButton, 0.1, {
         scale: 1,
@@ -137,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
         scale: 1,
         display: 'block',
         ease: Expo.easeOut,
+        delay: 0.1,
         onComplete: () => {
           this._isDisabled = true;
         }

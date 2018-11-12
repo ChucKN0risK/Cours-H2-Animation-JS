@@ -67,7 +67,8 @@ form {
 	input {
 		padding-left: .5rem;
 		height: 100%;
-		width: calc(100% - #{$form-submit-width});
+		// width: calc(100% - #{$form-submit-width});
+		flex: 1;
 		outline: none;
 		color: $color-red;
 

@@ -148,14 +148,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   Form.bind('.js-form');
 
+
+
+
+
+
   class Modal {
   	/**
      * @param {HTMLElement} element
      */
     constructor(element) {
-      this._element             = element;
+      this._element        = element;
       this._modalToggleBtn = this._element.querySelector('.js-toggle-btn');
-      this._modal          = this._element.querySelector('.js-' + this._modalToggleBtn.dataset.content);
+      this._modal          = this._element.querySelector(`.js-${this._modalToggleBtn.dataset.content}`);
       this._isOpened       = false;
 
       this._events();
@@ -175,9 +180,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     _events() {
-      this._modalToggleBtn.addEventListener('click', () => {
-        this._toggle();
-      })
+      // On associe la méthode toggle au click sur 
+      this._modalToggleBtn.addEventListener('click', () => this._toggle());
 
       // On ferme la modal si elle est affichée et qu'on 
       // appuie sur ESC

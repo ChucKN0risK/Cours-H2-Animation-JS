@@ -2,7 +2,7 @@ Hello les gens,
 
 Voici le code qu'on a pu faire ensemble aujourd'hui. J'ai essayé de mettre le plus de commentaires possible afin que ce soit le plus clair pour vous.
 
-Vous trouverez le code ici : https://github.com/ChucKN0risK/Cours-H2-Animation-JS/
+Vous trouverez les slides du cours en pièce-jointe et le code ici : https://github.com/ChucKN0risK/Cours-H2-Animation-JS/
 
 Quelques articles évoqués en cours :
 - https://davidwalsh.name/css-js-animation

@@ -1,7 +1,7 @@
 // On s'assure que notre code s'éxécute une fois que notre
 // DOM est bien chargé.
 document.addEventListener('DOMContentLoaded', () => {
-	console.info('main.js Loaded :)');
+	console.info('main.js loaded 😎');
 
   // Les noms des constructeurs doivent commencer par une majuscule.
   // Cela permet de savoir rapidement que des méthodes et des propriétés
@@ -13,6 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
      * Applique l'animation du formulaire sur les éléments
      * @param {string} selector
      */
+    // Le méthodes statiques sont des méthodes qui ont pour vocations
+    // à être appelées par la classe et non pas ses instances.
+    // Ici cette méthode "bind" nous sert à associer le comportement
+    // de notre class Form à un élément HTML passé en paramètre.
     static bind(selector) {
     	document.querySelectorAll(selector).forEach(element => new Form(element))
     }
@@ -32,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // La méthode _events() comorte l'ensemble des évènements
+    // La méthode _events() comporte l'ensemble des évènements
     // que nous ajoutons sur notre Class ou sur ses éléments
     // enfants.
     _events() {
